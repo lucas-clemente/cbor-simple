@@ -8,9 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Cbor::Simple::VERSION
   spec.authors       = ["Lucas Clemente"]
   spec.email         = ["lucas@clemente.io"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Basic but extensible CBOR implementation for ruby.}
+  spec.homepage      = "https://github.com/lucas-clemente/cbor-simple"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

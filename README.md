@@ -1,29 +1,41 @@
-# Cbor::Simple
+# CBOR Simple
 
-TODO: Write a gem description
+```ruby
+gem 'cbor-simple'
+```
 
-## Installation
+A basic but extensible implementation of [CBOR (RFC7049)](http://tools.ietf.org/html/rfc7049) in plain ruby.
 
-Add this line to your application's Gemfile:
+Use just like `JSON` or `YAML`:
 
-    gem 'cbor-simple'
+```ruby
+CBOR.dump(42)         # => "\x18\x2a"
+CBOR.load("\x18\x2a") # => 42
+```
 
-And then execute:
+You can add custom tags like this:
 
-    $ bundle
+```ruby
+CBOR.register_tag 0 do
+  Time.iso8601(read())
+end
+```
 
-Or install it yourself as:
+And add classes for dumping:
 
-    $ gem install cbor-simple
+```ruby
+CBOR.register_class Time, 0 do |obj|
+  send(obj.iso8601(6))
+end
+```
 
-## Usage
+Currently supported classes:
 
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/cbor-simple/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+- (Unsigned) Integers
+- Floats (single and double)
+- Byte / Textstring (also symbols)
+- Arrays
+- Hashes
+- BigDecimals
+- UUIDs (if the gem `uuidtools` is visible)
+- Times
