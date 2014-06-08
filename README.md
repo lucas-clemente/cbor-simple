@@ -17,7 +17,7 @@ You can add custom tags like this:
 
 ```ruby
 CBOR.register_tag 0 do
-  Time.iso8601(read())
+  Time.iso8601(load())
 end
 ```
 
@@ -25,7 +25,7 @@ And add classes for dumping:
 
 ```ruby
 CBOR.register_class Time, 0 do |obj|
-  send(obj.iso8601(6))
+  dump(obj.iso8601(6))
 end
 ```
 
