@@ -53,3 +53,13 @@ CBOR.register_tag CBOR::Consts::Tag::DECIMAL do
   raise CBOR::CborError.new("invalid decimal") if arr.length != 2
   BigDecimal.new(arr[1]) * (BigDecimal.new(10) ** arr[0])
 end
+
+if defined? UUIDTools::UUID
+  CBOR.register_class UUIDTools::UUID, CBOR::Consts::Tag::UUID do |val|
+    dump val.raw.b
+  end
+
+  CBOR.register_tag CBOR::Consts::Tag::UUID do
+    UUIDTools::UUID.parse_raw(load)
+  end
+end

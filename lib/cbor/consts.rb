@@ -13,7 +13,7 @@ module CBOR::Consts
   module Tag
     DATETIME = 0
     DECIMAL = 4
-    UUID = 7
+    UUID = 37
   end
 
   module Simple
