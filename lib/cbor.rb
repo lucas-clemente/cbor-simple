@@ -13,15 +13,18 @@ module CBOR
   end
 
   # Load CBOR-encoded data.
+  #
   # `binary` can be either a String or an IO object. In both cases the first
   # encoded object will be returned.
-  def self.load(binary)
+  #
+  # Local tags (as a hash of tag => lambda) will only be valid within this method.
+  def self.load(binary, local_tags = {})
     if binary.is_a? String
       binary = StringIO.new(binary)
     elsif !binary.is_a? IO
       raise CborError.new("can only load from String or IO")
     end
-    Loader.new(binary).load
+    Loader.new(binary, local_tags).load
   end
 
   def self.register_class(klass, tag, &block)

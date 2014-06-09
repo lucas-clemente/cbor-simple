@@ -7,8 +7,9 @@ class CBOR::Loader
     @@registered_tags[tag] = block
   end
 
-  def initialize(io)
+  def initialize(io, local_tags)
     @io = io
+    @local_tags = local_tags
   end
 
   def load
@@ -39,6 +40,8 @@ class CBOR::Loader
     when Major::TAG
       tag = get_uint(typeInt)
       if block = @@registered_tags[tag]
+        instance_exec(&block)
+      elsif block = @local_tags[tag]
         instance_exec(&block)
       else
         raise CBOR::CborError.new("Unknown tag #{tag}")

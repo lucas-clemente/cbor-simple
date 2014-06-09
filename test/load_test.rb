@@ -12,4 +12,8 @@ class TestLoad < Minitest::Test
       CBOR.load(5)
     end
   end
+
+  def test_loading_local_tags
+    assert_equal false, CBOR.load("\xd8\x26\xf5", {0x26 => ->{ !load }})
+  end
 end
