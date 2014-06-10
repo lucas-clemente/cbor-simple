@@ -16,16 +16,16 @@ CBOR.load("\x18\x2a")   # => 42
 You can add custom tags like this:
 
 ```ruby
-CBOR.register_tag 0 do
-  Time.iso8601(load())
+CBOR.register_tag 0 do |l|
+  Time.iso8601(l.load())
 end
 ```
 
 And add classes for dumping:
 
 ```ruby
-CBOR.register_class Time, 0 do |obj|
-  dump(obj.iso8601(6))
+CBOR.register_class Time, 0 do |d, val|
+  d.dump(val.iso8601(6))
 end
 ```
 
@@ -33,7 +33,7 @@ Custom tags can also be given as second parameter to `load`, however this should
 
 ```ruby
 # Invert values tagged with 0x26 (nonstandard!)
-CBOR.load("\xd8\x26\xf5", {0x26 => ->{ !load }})  # => false
+CBOR.load("\xd8\x26\xf5", {0x26 => -> (l) { !l.load }})  # => false
 ```
 
 Currently supported classes:

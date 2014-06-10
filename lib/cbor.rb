@@ -36,33 +36,33 @@ module CBOR
   end
 end
 
-CBOR.register_class Time, CBOR::Consts::Tag::DATETIME do |val|
-  dump(val.iso8601(6))
+CBOR.register_class Time, CBOR::Consts::Tag::DATETIME do |d, val|
+  d.dump(val.iso8601(6))
 end
 
-CBOR.register_tag CBOR::Consts::Tag::DATETIME do
-  Time.iso8601(load)
+CBOR.register_tag CBOR::Consts::Tag::DATETIME do |l|
+  Time.iso8601(l.load)
 end
 
-CBOR.register_class BigDecimal, CBOR::Consts::Tag::DECIMAL do |val|
+CBOR.register_class BigDecimal, CBOR::Consts::Tag::DECIMAL do |d, val|
   sign, significant_digits, base, exponent = val.split
   raise CBOR::CborError.new("NaN while sending BigDecimal #{val.inspect}") if sign == 0
   val = sign * significant_digits.to_i(base)
-  dump([exponent - significant_digits.size, val])
+  d.dump([exponent - significant_digits.size, val])
 end
 
-CBOR.register_tag CBOR::Consts::Tag::DECIMAL do
-  arr = load
+CBOR.register_tag CBOR::Consts::Tag::DECIMAL do |l|
+  arr = l.load
   raise CBOR::CborError.new("invalid decimal") if arr.length != 2
   BigDecimal.new(arr[1]) * (BigDecimal.new(10) ** arr[0])
 end
 
 if defined? UUIDTools::UUID
-  CBOR.register_class UUIDTools::UUID, CBOR::Consts::Tag::UUID do |val|
-    dump val.raw.b
+  CBOR.register_class UUIDTools::UUID, CBOR::Consts::Tag::UUID do |d, val|
+    d.dump val.raw.b
   end
 
-  CBOR.register_tag CBOR::Consts::Tag::UUID do
-    UUIDTools::UUID.parse_raw(load)
+  CBOR.register_tag CBOR::Consts::Tag::UUID do |l|
+    UUIDTools::UUID.parse_raw(l.load)
   end
 end
