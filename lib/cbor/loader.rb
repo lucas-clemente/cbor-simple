@@ -40,9 +40,9 @@ class CBOR::Loader
     when Major::TAG
       tag = get_uint(typeInt)
       if block = @@registered_tags[tag]
-        block.call(self)
+        block.call(load)
       elsif block = @local_tags[tag]
-        block.call(self)
+        block.call(load)
       else
         raise CBOR::CborError.new("Unknown tag #{tag}")
       end

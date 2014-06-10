@@ -35,7 +35,7 @@ class CBOR::Dumper
       dump_uint(Major::MAP, val.count) + val.map{|k, v| dump(k.to_s) + dump(v)}.join
     else
       if h = @@registered_classes[val.class]
-        dump_uint(Major::TAG, h[:tag]) + h[:block].call(self, val)
+        dump_uint(Major::TAG, h[:tag]) + dump(h[:block].call(val))
       else
         raise CBOR::CborError.new("dumping not supported for objects of type #{val.class} (#{val.inspect})")
       end
