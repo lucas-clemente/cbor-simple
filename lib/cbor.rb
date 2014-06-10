@@ -21,7 +21,7 @@ module CBOR
   def self.load(binary, local_tags = {})
     if binary.is_a? String
       binary = StringIO.new(binary)
-    elsif !binary.is_a? IO
+    elsif !binary.respond_to? :read
       raise CborError.new("can only load from String or IO")
     end
     Loader.new(binary, local_tags).load
