@@ -86,7 +86,7 @@ class CBOR::Loader
 
   def get_bytes(count, pack_opts)
     s = @io.read(count)
-    if s.size < count
+    if s.nil? || s.size < count
       raise CBOR::CborError.new("Unexpected end of input")
     end
     s.unpack(pack_opts).first
